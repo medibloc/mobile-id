@@ -14,7 +14,7 @@ export default class CreateAccount extends React.Component {
 
   signUpForm() {
     return (
-      <View>
+      <View style={{paddingLeft: 20, paddingRight: 20}}>
         <TextInput style={{height: 40}}
           placeholder="Email Address"
           onChangeText={(email) => this.setState({email})}
@@ -47,12 +47,35 @@ export default class CreateAccount extends React.Component {
       .then((r) => r.json())
       .then((o) => {
         console.log(o)
-        AsyncStorage.setItem('@Medibloc:priKey', o.key, (e) => {
+        AsyncStorage.setItem('@MediBloc:priKey', o.key, (e) => {
           if (e) {
             console.log('Private key could not be stored: ' + e)
             return
           }
           console.log('Account created!!')
+
+          AsyncStorage.setItem('@MediBloc:account', o.account, (e) => {
+            if (e) {
+              console.log('Account could not be stored: ' + e)
+              return
+            }
+
+            AsyncStorage.setItem('@MediBloc:email', email, (e) => {
+              if (e) {
+                console.log('Email address could not be stored: ' + e)
+                return
+              }
+              this.props.navigation.dispatch(NavigationActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({routeName: 'GetProfile', params: {
+                    email: email,
+                    password: password
+                  }})
+                ]
+              }))
+            })
+          })
         })
       })
       .catch((error) => {

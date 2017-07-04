@@ -15,20 +15,45 @@ export default class Home extends React.Component {
       ]
     })
 
-    AsyncStorage.getItem('@Medibloc:priKey').then((priKey) => {
-      if (priKey === null) {
-        Alert.alert(
-          'Account not found',
-          'You should create or restore your Medibloc account.',
-          [
-            {text: 'OK', onPress: () => this.props.navigation.dispatch(resetAction)},
-          ],
-          { cancelable: false }
-        )
-      } else {
+    if (this.props.navigation.state.params === undefined ||
+      this.props.navigation.state.params.noReset === undefined) {
+      AsyncStorage.removeItem('@MediBloc:priKey').then(() => {
+        AsyncStorage.getItem('@MediBloc:priKey').then((priKey) => {
+          if (priKey === null) {
+            Alert.alert(
+              'Account not found',
+              'You should create or restore your MediBloc account.',
+              [
+                {text: 'OK', onPress: () => this.props.navigation.dispatch(resetAction)},
+              ],
+              { cancelable: false }
+            )
+          } else {
 
-      }
-    })
+          }
+        })
+      })
+    } else {
+      AsyncStorage.getItem('@MediBloc:priKey').then((priKey) => {
+        if (priKey === null) {
+          Alert.alert(
+            'Account not found',
+            'You should create or restore your MediBloc account.',
+            [
+              {text: 'OK', onPress: () => this.props.navigation.dispatch(resetAction)},
+            ],
+            { cancelable: false }
+          )
+        } else {
+          this.props.navigation.dispatch(NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({routeName: 'Lounge'})
+            ]
+          }))
+        }
+      })
+    }
   }
 
   render() {
