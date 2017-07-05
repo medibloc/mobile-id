@@ -2,14 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Home from './components/Home';
-import KeySetup from './components/KeySetup'
+import AccountSetup from './components/AccountSetup'
 import CreateAccount from './components/CreateAccount'
 import GetProfile from './components/GetProfile'
 import Lounge from './components/Lounge'
 
 const MainNavigator = StackNavigator({
   Home: { screen: Home },
-  KeySetup: { screen: KeySetup },
+  AccountSetup: { screen: AccountSetup },
   CreateAccount: { screen: CreateAccount },
   GetProfile: { screen: GetProfile },
   Lounge: { screen: Lounge },

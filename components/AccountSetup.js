@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, AsyncStorage, TouchableHighlight } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 
-export default class KeySetup extends React.Component {
+export default class AccountSetup extends React.Component {
   constructor(props) {
     super(props)
   }

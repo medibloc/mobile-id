@@ -11,7 +11,7 @@ export default class Home extends React.Component {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({routeName: 'KeySetup'})
+        NavigationActions.navigate({routeName: 'AccountSetup'})
       ]
     })
 
@@ -33,7 +33,8 @@ export default class Home extends React.Component {
           }
         })
       })
-    } else {
+    } else
+    {
       AsyncStorage.getItem('@MediBloc:priKey').then((priKey) => {
         if (priKey === null) {
           Alert.alert(

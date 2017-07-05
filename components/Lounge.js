@@ -13,7 +13,7 @@ export default class Lounge extends React.Component {
     const resetAction = NavigationActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({routeName: 'KeySetup'})
+        NavigationActions.navigate({routeName: 'AccountSetup'})
       ]
     })
 
@@ -99,17 +99,77 @@ export default class Lounge extends React.Component {
           <Text style={{fontSize: 32, color: 'white'}}>Fetching profile...</Text>
         </View>
       :
-        <ScrollView style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Text>{this.state.name}</Text>
-          <Text>{this.state.isFemale ? 'Female' : 'Male'}</Text>
-          <Text>{this.state.birthY}/{this.state.birthM}/{this.state.birthD}</Text>
-          <Text>{this.state.height/10.} CM</Text>
-          <Text>{this.state.weight} KG</Text>
+        <ScrollView style={{paddingLeft: 10, paddingRight: 10, paddingTop: 20}}>
+          <View style={[styles.row, {marginBottom: 30}]}>
+            <View style={styles.item}>
+              <Text style={styles.nameText}>{this.state.name}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.label}><Text style={styles.labelText}>Age</Text></View>
+            <View style={styles.item}>
+              <Text style={styles.itemText}>{new Date().getFullYear() - this.state.birthY}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.label}><Text style={styles.labelText}>Sex</Text></View>
+            <View style={styles.item}>
+              <Text style={styles.itemText}>{this.state.isFemale ? 'Female' : 'Male'}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.label}><Text style={styles.labelText}>Birthday</Text></View>
+            <View style={styles.item}>
+              <Text style={styles.itemText}>{this.state.birthY} / {this.state.birthM} / {this.state.birthD}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.label}><Text style={styles.labelText}>Height</Text></View>
+            <View style={styles.item}>
+              <Text style={styles.itemText}>{this.state.height/10.} cm</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.label}><Text style={styles.labelText}>Weight</Text></View>
+            <View style={styles.item}>
+              <Text style={styles.itemText}>{this.state.weight} kg</Text>
+            </View>
+          </View>
         </ScrollView>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row'
+  },
+
+  label: {
+    flex: 1,
+    height: 40,
+    paddingTop: 10
+  },
+
+  labelText: {
+    textAlign: 'right',
+    paddingRight: 30
+  },
+
+  item: {
+    flex: 1,
+    height: 40,
+    paddingTop: 10
+  },
+
+  itemText: {
+    textAlign: 'left',
+    paddingLeft: 30
+  },
+
+  nameText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 28
+  },
+});
