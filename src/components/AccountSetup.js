@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View, AsyncStorage, TouchableHighlight } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { connect } from 'react-redux'
+import * as actionCreators from '../action_creators'
 
-export default class AccountSetup extends React.Component {
+export default class AccountSetup extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -11,16 +12,11 @@ export default class AccountSetup extends React.Component {
     return (
       <View style={{flex: 1}}>
         <TouchableHighlight style={[styles.listItem, {backgroundColor: 'red'}]}
-          onPress={() => this.props.navigation.dispatch(NavigationActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({routeName: 'CreateAccount'})
-            ]
-          }))}>
-          <Text style={{fontSize: 32, color: 'white'}}>Create New Account</Text>
+          onPress={() => this.props.createAccount()}>
+          <Text style={{fontSize: 32, color: 'white'}}>Create Account</Text>
         </TouchableHighlight>
         <TouchableHighlight style={[styles.listItem, {backgroundColor: 'orange'}]}>
-          <Text style={{fontSize: 32, color: 'white'}}>Restore Original Account</Text>
+          <Text style={{fontSize: 32, color: 'white'}}>Restore Account</Text>
         </TouchableHighlight>
       </View>
     )
@@ -37,4 +33,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
   }
-});
+})
+
+function mapStateToProps(state) {
+  return {}
+}
+
+export const AccountSetupContainer = connect(
+  mapStateToProps,
+  actionCreators
+)(AccountSetup)

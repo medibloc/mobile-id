@@ -1,25 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import Home from './components/Home';
-import AccountSetup from './components/AccountSetup'
-import CreateAccount from './components/CreateAccount'
-import GetProfile from './components/GetProfile'
-import Lounge from './components/Lounge'
+import React from 'react'
+import { StyleSheet } from 'react-native'
+import { Provider } from 'react-redux'
+import { applyMiddleware, createStore } from 'redux'
+import logger from 'redux-logger'
 
-const MainNavigator = StackNavigator({
-  Home: { screen: Home },
-  AccountSetup: { screen: AccountSetup },
-  CreateAccount: { screen: CreateAccount },
-  GetProfile: { screen: GetProfile },
-  Lounge: { screen: Lounge },
-});
+import AppReducer from './src/reducer'
+import AppWithNavigationState from './src/navigators/AppNavigator'
+
+const middleware = () => {
+  return applyMiddleware(logger)
+}
 
 export default class App extends React.Component {
+  store = createStore(AppReducer, middleware())
+
   render() {
     return (
-      <MainNavigator />
-    );
+      <Provider store={this.store}>
+        <AppWithNavigationState />
+      </Provider>
+    )
   }
 }
 
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})

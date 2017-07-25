@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View, AsyncStorage, TextInput, Button } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { connect } from 'react-redux'
+import * as actionCreators from '../action_creators'
 
-export default class CreateAccount extends React.Component {
+export default class CreateAccount extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,6 +34,7 @@ export default class CreateAccount extends React.Component {
   }
 
   requestSignUp(email, password) {
+    this.props.sentRequest()
     fetch('http://localhost:3000/create', {
       method: 'POST',
       headers: {
@@ -47,6 +49,7 @@ export default class CreateAccount extends React.Component {
       .then((r) => r.json())
       .then((o) => {
         console.log(o)
+        this.props.gotResponse()
         AsyncStorage.setItem('@MediBloc:priKey', o.key, (e) => {
           if (e) {
             console.log('Private key could not be stored: ' + e)
@@ -65,15 +68,8 @@ export default class CreateAccount extends React.Component {
                 console.log('Email address could not be stored: ' + e)
                 return
               }
-              this.props.navigation.dispatch(NavigationActions.reset({
-                index: 0,
-                actions: [
-                  NavigationActions.navigate({routeName: 'GetProfile', params: {
-                    email: email,
-                    password: password
-                  }})
-                ]
-              }))
+              this.props.setAccount(email, o.account)
+              this.props.getProfile()
             })
           })
         })
@@ -81,12 +77,11 @@ export default class CreateAccount extends React.Component {
       .catch((error) => {
         console.error(error);
       });
-    this.setState({sentRequest: true})
   }
 
   render() {
     return (
-      this.state.sentRequest ?
+      this.props.sentRequestFlg ?
         <View style={{flex: 1,
           backgroundColor: 'blue',
           alignItems: 'center',
@@ -99,3 +94,14 @@ export default class CreateAccount extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    sentRequestFlg: state.main.get('sentRequest')
+  }
+}
+
+export const CreateAccountContainer = connect(
+  mapStateToProps,
+  actionCreators
+)(CreateAccount)

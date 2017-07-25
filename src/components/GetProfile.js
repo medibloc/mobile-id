@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, AsyncStorage, TextInput, Picker, Button, Alert } from 'react-native'
-import { NavigationActions } from 'react-navigation'
+import { connect } from 'react-redux'
+import * as actionCreators from '../action_creators'
 
-export default class CreateAccount extends React.Component {
+export default class GetProfile extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -31,31 +32,21 @@ export default class CreateAccount extends React.Component {
           <Picker.Item label="Female" value={true} />
           <Picker.Item label="Male" value={false} />
         </Picker>
-        <Picker style={{marginTop: 30, marginLeft: 30, marginRight: 30}}
-          selectedValue={this.state.birthY}
-          onValueChange={(itemValue, itemIndex) => this.setState({birthY: itemValue})}>
-          {Array(120).fill().map((_, i) =>
-            <Picker.Item key={i} label={"" + (i + this.today.getFullYear() - 120)}
-              value={i + this.today.getFullYear() - 120} />
-          )}
-        </Picker>
-        <Picker style={{marginTop: 30, marginLeft: 30, marginRight: 30}}
-          selectedValue={this.state.birthM}
-          onValueChange={(itemValue, itemIndex) => this.setState({birthM: itemValue})}>
-          {Array(12).fill().map((_, i) =>
-            <Picker.Item key={i} label={"" + (i + 1)}
-              value={i + 1} />
-          )}
-        </Picker>
-        <Picker style={{marginTop: 30, marginLeft: 30, marginRight: 30}}
-          selectedValue={this.state.birthD}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({birthD: itemValue})}>
-          {Array(31).fill().map((_, i) =>
-            <Picker.Item key={i} label={"" + (i + 1)}
-              value={i + 1} />
-          )}
-        </Picker>
+        <TextInput style={{height: 40}}
+          placeholder="Born year (4 digits)"
+          keyboardType="numeric"
+          onChangeText={(birthY) => this.setState({birthY})}
+        />
+        <TextInput style={{height: 40}}
+          placeholder="Born month"
+          keyboardType="numeric"
+          onChangeText={(birthM) => this.setState({birthM})}
+        />
+        <TextInput style={{height: 40}}
+          placeholder="Born day"
+          keyboardType="numeric"
+          onChangeText={(birthD) => this.setState({birthD})}
+        />
         <TextInput style={{height: 40}}
           placeholder="Height(MM)"
           keyboardType="numeric"
@@ -67,18 +58,19 @@ export default class CreateAccount extends React.Component {
           onChangeText={(weight) => this.setState({weight})}
         />
         <Button title="Sign Up"
+          style={{marginBottom: 100}}
           disabled={this.state.name.length == 0 ||
             this.state.height.length == 0 ||
-            this.state.weight.length == 0}
+            this.state.weight.length == 0 ||
+            this.state.birthY.length != 4}
           onPress={() =>
-            this.updateProfile(this.props.navigation.state.params.email,
-              this.props.navigation.state.params.password)}
+            this.updateProfile(this.props.email)}
         />
       </ScrollView>
     )
   }
 
-  updateProfile(email, password) {
+  updateProfile(email) {
     AsyncStorage.getItem('@MediBloc:account', (e, r) => {
       if (e) {
         console.log(e)
@@ -117,7 +109,6 @@ export default class CreateAccount extends React.Component {
           },
           body: JSON.stringify({
             email: email,
-            password: password,
             account: account,
             priKey: priKey,
             profile: this.state
@@ -126,26 +117,20 @@ export default class CreateAccount extends React.Component {
           .then((r) => r.json())
           .then((o) => {
             console.log(o)
-            this.props.navigation.dispatch(NavigationActions.reset({
-              index: 0,
-              actions: [
-                NavigationActions.navigate({routeName: 'Home', params: {
-                  noReset: true
-                }})
-              ]
-            }))
+            this.props.gotResponse()
+            this.props.goHome()
           })
           .catch((error) => {
             console.error(error);
           });
-        this.setState({sentRequest: true})
+        this.props.sentRequest()
       })
     })
   }
 
   render() {
     return (
-      this.state.sentRequest ?
+      this.props.sentRequestFlg === true ?
         <View style={{flex: 1,
           backgroundColor: 'blue',
           alignItems: 'center',
@@ -158,3 +143,16 @@ export default class CreateAccount extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    email: state.main.getIn(['user', 'email']),
+    account: state.main.getIn(['user', 'account']),
+    sentRequestFlg: state.main.get('sentRequest')
+  }
+}
+
+export const GetProfileContainer = connect(
+  mapStateToProps,
+  actionCreators
+)(GetProfile)
