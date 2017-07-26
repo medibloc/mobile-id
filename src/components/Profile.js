@@ -27,7 +27,7 @@ export default class Profile extends React.PureComponent {
             </View>
           </View>
           <View style={styles.row}>
-            <View style={styles.label}><Text style={styles.labelText}>MediCoin</Text></View>
+            <View style={styles.label}><Text style={styles.labelText}>Medi Token</Text></View>
             <View style={styles.item}>
               <Text style={styles.itemText}>{this.props.balance} MED</Text>
             </View>

@@ -10,7 +10,7 @@ export class Home extends React.PureComponent {
 
   loadAccount(next) {
     if (this.props.account !== undefined && this.props.email !== undefined) {
-      AsyncStorage.get('@MediBloc:priKey', (e, r) => {
+      AsyncStorage.getItem('@MediBloc:priKey', (e, r) => {
         return next(null, {
           priKey: r,
           account: this.props.account,

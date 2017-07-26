@@ -1,11 +1,24 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, AsyncStorage, Alert, Button, Modal, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
+import socketIo from 'socket.io-client'
 import * as actionCreators from '../action_creators'
 
 export default class Menu extends React.PureComponent {
   constructor(props) {
     super(props)
+  }
+
+  sendLoginVerification() {
+    let socketClient = socketIo('http://localhost:7080')
+    AsyncStorage.getItem('@MediBloc:priKey', (e, r) => {
+      socketClient.emit('action', {
+        type: 'VERIFY_LOGIN',
+        email: this.props.email,
+        account: this.props.account,
+        priKey: r
+      })
+    })
   }
 
   render() {
@@ -21,6 +34,9 @@ export default class Menu extends React.PureComponent {
                 onPress={() => this.props.registerLicense()}
               />
             }
+            <Button title="Verify Login on Dolphin"
+              onPress={() => this.sendLoginVerification()}
+            />
           </View>
         </View>
       </ScrollView>
@@ -31,7 +47,9 @@ export default class Menu extends React.PureComponent {
 function mapStateToProps(state) {
   return {
     isDoctor: state.main.getIn(['user', 'isDoctor']),
-    name: state.main.getIn(['user', 'profile', 'name'])
+    name: state.main.getIn(['user', 'profile', 'name']),
+    email: state.main.getIn(['user', 'email']),
+    account: state.main.getIn(['user', 'account']),
   }
 }
 
