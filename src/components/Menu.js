@@ -27,14 +27,14 @@ export default class Menu extends React.PureComponent {
         <View style={[styles.row, {marginBottom: 30}]}>
           <View style={styles.item}>
             {this.props.isDoctor === true ?
-              <Text>Hello Dr. {this.props.name}</Text>
+              <Text style={{textAlign: 'center'}}>Hello Dr. {this.props.name}</Text>
               :
               <Button title="Are you a medical doctor?"
                 disabled={this.props.isDoctor}
                 onPress={() => this.props.registerLicense()}
               />
             }
-            <Button title="Verify Login on Dolphin"
+            <Button title="Verify login on Dolphin"
               onPress={() => this.sendLoginVerification()}
             />
           </View>

@@ -14,6 +14,7 @@ import {MenuContainer} from '../components/Menu'
 import {RegisterLicenseContainer} from '../components/RegisterLicense'
 import {GetPatientContainer} from '../components/GetPatient'
 import {PatientsContainer} from '../components/Patients'
+import {WriteHistoryContainer} from '../components/WriteHistory'
 
 export const AppNavigator = StackNavigator({
   Home: { screen: HomeContainer },
@@ -27,6 +28,7 @@ export const AppNavigator = StackNavigator({
   RegisterLicense: { screen: RegisterLicenseContainer },
   GetPatient: { screen: GetPatientContainer },
   Patients: { screen: PatientsContainer },
+  WriteHistory: { screen: WriteHistoryContainer },
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (

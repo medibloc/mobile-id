@@ -4,16 +4,20 @@ import { connect } from 'react-redux'
 import * as actionCreators from '../action_creators'
 
 export default class History extends React.PureComponent {
-  ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-
   constructor(props) {
     super(props)
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+  }
+
+  componentDidMount() {
+    console.log('**** Histories: ' + JSON.stringify(this.props.histories))
   }
 
   render() {
     if (this.props.histories.length > 0) {
       return (
         <ListView
+          removeClippedSubviews={false} //A workaround for a bug where the list items are not shown until scroll
           dataSource={this.ds.cloneWithRows(this.props.histories)}
           renderRow={(rowData) =>
             <View style={styles.row}>
@@ -25,7 +29,7 @@ export default class History extends React.PureComponent {
       )
     } else {
       return (
-        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text>No medical history</Text>
         </View>
       )
@@ -35,7 +39,7 @@ export default class History extends React.PureComponent {
 
 function mapStateToProps(state) {
   return {
-    histories: state.main.getIn(['user', 'histories']) ? state.main.getIn(['user', 'histories']).toJS() : []
+    histories: state.main.getIn(['user', 'histories']) !== undefined ? state.main.getIn(['user', 'histories']).toJS() : []
   }
 }
 

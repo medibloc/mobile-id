@@ -65,14 +65,6 @@ export class Home extends React.PureComponent {
         .then((o) => {
           console.log(o)
           this.props.setProfile(o.profile, o.balance, o.isDoctor)
-          if (o.isDoctor === true) {
-            this.setState({routes: [
-              { key: '1', title: 'Profile' },
-              { key: '2', title: 'History' },
-              { key: '3', title: 'Patients' },
-              { key: '4', title: 'Menu' },
-            ]})
-          }
         })
         .catch((err) => {
           console.error(err)
