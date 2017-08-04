@@ -77,7 +77,7 @@ export default class WriteHistory extends React.PureComponent {
             priKey
           },
           content: {
-            diseaseName: this.state.diseaseName,
+            disease: this.state.disease,
             prescription: this.state.prescription,
             description: this.state.description
           }

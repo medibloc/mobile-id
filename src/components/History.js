@@ -21,7 +21,7 @@ export default class History extends React.PureComponent {
           dataSource={this.ds.cloneWithRows(this.props.histories)}
           renderRow={(rowData) =>
             <View style={styles.row}>
-              <Text>{rowData.diseaseName}</Text>
+              <Text>{rowData.disease}</Text>
               <Text>{rowData.prescription}</Text>
             </View>
           }
